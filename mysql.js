@@ -1,7 +1,6 @@
 var mysql = require('mysql');
-
 var redis = require("redis"),
-    client = redis.createClient();
+  client = redis.createClient();
 
 var connection = mysql.createConnection({
   host     : 'walle',
@@ -10,30 +9,43 @@ var connection = mysql.createConnection({
   database : 'ILO'
 });
 
-var sql = {}, source = {};
+var sql = {};
 
 sql.environment = "SELECT * FROM ENVIRONMENT";
+sql.pillar = "SELECT * FROM PILLAR";
 sql.source = "SELECT * FROM SOURCE";
+sql.indicator = "SELECT * FROM INDICATOR";
+sql.region = "SELECT * FROM REGION";
 sql.country = "SELECT * FROM COUNTRY";
 
 sql.print = function(err, rows, fields) {
-  if (err) throw err;
-  console.log(rows);
+    if (err) throw err;
+    console.log(rows);
+    console.log(fields[0].table);
 }
 
 sql.store = function(err, rows, fields) {
-  if (err) throw err;
-
-  req.session.source = rows;
-  /*source.rows = rows;
-  source.fields = fields;*/
-  //console.log(source.fields);
+    if (err) throw err;
+    client.set(fields[0].table, JSON.stringify(rows), redis.print);
+    sql.retrieve(fields[0].table);
 }
 
-connection.connect();
-//connection.query(sql.environment, sql.print);
-connection.query(sql.source, sql.store);
-//connection.query(sql.country, sql.print);
-connection.end();
+sql.retrieve = function(key) {
+    client.get(key, function(err, reply) {
+        console.log(JSON.parse(reply));
+    });
+    //client.quit();
+}
 
-console.log(req.session.source);
+client.on("error", function (err) {
+    console.log(err);
+});
+
+connection.connect();
+/*connection.query(sql.environment, sql.store);
+connection.query(sql.pillar, sql.store);
+connection.query(sql.source, sql.store);*/
+//connection.query(sql.indicator, sql.store);
+connection.query(sql.region, sql.store);
+//connection.query(sql.country, sql.store);
+connection.end();
