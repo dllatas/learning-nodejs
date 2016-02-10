@@ -18941,11 +18941,89 @@ module.exports = require('./lib/React');
 var React = require("react");
 var ReactDOM = require("react-dom");
 
-ReactDOM.render(React.createElement(
-    "h1",
-    null,
-    "Hello, World !!"
-), document.getElementById("example"));
+var data = [{ id: 1, author: "Zingo Tawfique", text: "This is one comment" }, { id: 2, author: "Yoni Amoiridou", text: "This is two comment" }];
+
+var HelloWorld = React.createClass({
+  displayName: "HelloWorld",
+
+  render: function () {
+    return React.createElement(
+      "h1",
+      null,
+      "Hello World !!"
+    );
+  }
+});
+
+ReactDOM.render(React.createElement(HelloWorld, null), document.getElementById("example"));
+
+var CommentBox = React.createClass({
+  displayName: "CommentBox",
+
+  render: function () {
+    return React.createElement(
+      "div",
+      { className: "commentBox" },
+      React.createElement(
+        "h1",
+        null,
+        "Comments"
+      ),
+      React.createElement(CommentList, { data: this.props.data }),
+      React.createElement(CommentForm, null)
+    );
+  }
+});
+
+var CommentList = React.createClass({
+  displayName: "CommentList",
+
+  render: function () {
+    var commentNodes = this.props.data.map(function (comment) {
+      return React.createElement(
+        Comment,
+        { author: comment.author, key: comment.id },
+        comment.text
+      );
+    });
+    return React.createElement(
+      "div",
+      { className: "commentList" },
+      commentNodes
+    );
+  }
+});
+
+var CommentForm = React.createClass({
+  displayName: "CommentForm",
+
+  render: function () {
+    return React.createElement(
+      "div",
+      { className: "commentForm" },
+      "YO! Ama commentForm"
+    );
+  }
+});
+
+var Comment = React.createClass({
+  displayName: "Comment",
+
+  render: function () {
+    return React.createElement(
+      "div",
+      { className: "comment" },
+      React.createElement(
+        "h2",
+        { className: "commentAuthor" },
+        this.props.author
+      ),
+      this.props.children
+    );
+  }
+});
+
+ReactDOM.render(React.createElement(CommentBox, { data: data }), document.getElementById("content"));
 
 },{"react":157,"react-dom":1}],159:[function(require,module,exports){
 // shim for using process in browser
