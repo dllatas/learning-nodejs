@@ -1,10 +1,23 @@
 var React = require("react");
 var ReactDOM = require("react-dom");
+var $ = require("jquery");
+var redis = require("redis"),
+  client = redis.createClient();
 
-var data = [
+/*var data = [
   {id: 1, author: "Zingo Tawfique", text: "This is one comment"},
   {id: 2, author: "Yoni Amoiridou", text: "This is two comment"}
-];
+];*/
+
+var data = {}
+
+data.retrieve = function(key) {
+    client.get(key, function(err, reply) {
+        return JSON.parse(reply);
+    });
+}
+
+var input = data.retrieve("REGION");
 
 var HelloWorld = React.createClass({
     render: function() {
@@ -20,11 +33,35 @@ ReactDOM.render(
 )
 
 var CommentBox = React.createClass({
+  loadCommentsFromServer: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: "json",
+      cache: false,
+      success: function(data) {
+        console.log("success");
+        console.log(data);
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.log(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  getInitialState: function() {
+    console.log("getInitialState");
+    return {data: []};
+  },
+  componentDidMount: function() {
+    console.log("MOunt");
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval)
+  },
   render: function() {
     return (
       <div className="commentBox">
           <h1>Comments</h1>
-          <CommentList data={this.props.data} />
+          <CommentList data={this.state.data} />
           <CommentForm />
         </div>
     );
@@ -72,6 +109,8 @@ var Comment = React.createClass({
 });
 
 ReactDOM.render(
-  <CommentBox data={data}/>,
+  // Fetch data from server
+  // <CommentBox data={data}/>,
+  <CommentBox url={input} pollInterval={2000}/>,
   document.getElementById("content")
 );
