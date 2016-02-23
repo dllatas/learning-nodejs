@@ -17,7 +17,7 @@ connection.query(eese.environment, eese.retrieve);
 
 app.get("/", function(req, res){
     res.send("hello world");
-})
+});
 
 app.get("/:id", function(req, res){
     var vContext, vContextOrder, vContextFinal;

@@ -8,7 +8,7 @@ function EESE() {
             if (err) throw err;
             client.set(fields[0].table, JSON.stringify(rows));
         }
-    }
+    };
 }
 
 module.exports = EESE();
