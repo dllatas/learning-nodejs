@@ -1,0 +1,9 @@
+{
+    "name": "eese-api",
+    "main": "main.js",
+    "dependencies": {
+        "express": "~4.0.0",
+        "mysql": "*",
+        "body-parser": "~1.0.1"
+    }
+}
