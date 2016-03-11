@@ -1,0 +1,29 @@
+{
+  "name": "daniel",
+  "version": "1.0.0",
+  "description": "testing node functionalities",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dllatas/node.git"
+  },
+  "keywords": [
+    "node"
+  ],
+  "author": "Daniel Llatas SPiers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dllatas/node/issues"
+  },
+  "homepage": "https://github.com/dllatas/node#readme",
+  "devDependencies": {
+    "eslint-plugin-react": "^4.2.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.3"
+  }
+}
