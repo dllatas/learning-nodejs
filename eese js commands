@@ -1,3 +1,0 @@
-git clone
-sudo npm install -g express-generator
-** change template engine from jade to hadlebarsjs
